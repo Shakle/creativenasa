@@ -31,8 +31,14 @@ class AppRouter {
     final bool loggedIn = authCubit.state is Authenticated;
     final bool isOnLoginScreen = state.matchedLocation == AppRoute.login.path;
 
-    return isOnLoginScreen && loggedIn
-        ? AppRoute.gallery.path
-        : AppRoute.login.path;
+    if (!loggedIn && !isOnLoginScreen) {
+      return AppRoute.login.path;
+    }
+
+    if (loggedIn && isOnLoginScreen) {
+      return AppRoute.gallery.path;
+    }
+
+    return null;
   }
 }

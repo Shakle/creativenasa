@@ -1,3 +1,5 @@
+import 'package:creativenasa/view/screens/login/widgets/process_description.dart';
+import 'package:creativenasa/view/widgets/app_scaffold.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -5,18 +7,16 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(child: Center(child: title(context))),
-            Expanded(child: Center(child: loginLoader())),
-            Expanded(child: Align(
-                alignment: const Alignment(0, 0.7),
-                child: processDescription(),
-            )),
-          ],
-        ),
+    return AppScaffold(
+      body: Column(
+        children: [
+          Expanded(child: Center(child: title(context))),
+          const Expanded(child: Center(child: CircularProgressIndicator())),
+          const Expanded(child: Align(
+            alignment: Alignment(0, 0.7),
+            child: ProcessDescription(),
+          )),
+        ],
       ),
     );
   }
@@ -28,11 +28,4 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget loginLoader() {
-    return const CircularProgressIndicator();
-  }
-
-  Widget processDescription() {
-    return const Text('Anonymous firebase login is in progress');
-  }
 }

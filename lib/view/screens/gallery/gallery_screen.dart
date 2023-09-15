@@ -1,3 +1,4 @@
+import 'package:creativenasa/view/widgets/app_scaffold.dart';
 import 'package:flutter/material.dart';
 
 class GalleryScreen extends StatelessWidget {
@@ -5,8 +6,12 @@ class GalleryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: Text('Gallery Screen')),
+    return AppScaffold(
+        body: ListView(
+          children: [
+
+          ],
+        ),
     );
   }
 }
