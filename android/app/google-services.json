@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "281805813528",
+    "project_id": "creativenasa-460d5",
+    "storage_bucket": "creativenasa-460d5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:281805813528:android:13b72cf3c6aeab26b5906d",
+        "android_client_info": {
+          "package_name": "com.shakle.creativenasa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKvqq8PsKE-R8uy4s6H61HH7gFlWxGrkQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
