@@ -1,4 +1,3 @@
-import 'package:creativenasa/data/api/nasa/nasa_credentials.dart';
 import 'package:creativenasa/router/router.dart';
 import 'package:creativenasa/view/blocs/auth/auth_cubit.dart';
 import 'package:creativenasa/view/theme/theme.dart';
@@ -26,7 +25,6 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    print(NasaCredentials.apiKey);
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         systemNavigationBarColor: Colors.white,
