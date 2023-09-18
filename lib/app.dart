@@ -28,6 +28,7 @@ class _AppState extends State<App> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         systemNavigationBarColor: Colors.white,
+        statusBarColor: Colors.transparent,
         systemNavigationBarIconBrightness: Brightness.dark,
       ),
       child: MaterialApp.router(
