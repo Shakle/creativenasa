@@ -39,10 +39,16 @@ class AuthCubit extends Cubit<AuthState> {
     emit(Authenticating());
 
     try {
-      await FirebaseAuth.instance.signInAnonymously();
+      await FirebaseAuth.instance.signInAnonymously()
+          .timeout(const Duration(seconds: 10),
+          onTimeout: () => throw TimeoutException('Login takes too much time'),
+      );
     } catch (e) {
       emit(AuthenticationFailed(exception: e));
       emit(Unauthenticated());
+      Future.delayed(const Duration(seconds: 3), () {
+        signInAnonymously(); // auto-retry for login
+      });
     }
   }
 

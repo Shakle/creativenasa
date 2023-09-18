@@ -15,6 +15,13 @@ class AppTheme {
           color: primaryColor,
         ),
       ),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: primaryColor,
+        contentTextStyle: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+        ),
+      ),
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:creativenasa/view/blocs/auth/auth_cubit.dart';
 import 'package:creativenasa/view/blocs/planets/planets_cubit.dart';
 import 'package:creativenasa/view/screens/gallery/widgets/planets_grid.dart';
 import 'package:creativenasa/view/widgets/app_scaffold.dart';
+import 'package:creativenasa/view/widgets/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -47,14 +48,29 @@ class GalleryScreen extends StatelessWidget {
   }
 
   Widget layout() {
-    return BlocBuilder<PlanetsCubit, PlanetsState>(
+    return BlocConsumer<PlanetsCubit, PlanetsState>(
+      listenWhen: (pState, state) => state is PlanetsError,
+      listener: (context, state) {
+        if (state is PlanetsError) {
+          showErrorSnackBar(context, state.exception.toString());
+        }
+      },
       builder: (context, state) {
         return switch (state) {
           PlanetsLoading() => const Center(child: CircularProgressIndicator()),
           PlanetsLoaded() => PlanetsGrid(planets: state.planets),
+          PlanetsError() => Center(child: errorInfo()),
           _ => const SizedBox(),
         };
       },
+    );
+  }
+
+  Widget errorInfo() {
+    return Builder(
+      builder: (context) {
+        return const Text('Planets fetching will start again soon');
+      }
     );
   }
 }

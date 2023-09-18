@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:creativenasa/data/models/planet.dart';
 import 'package:creativenasa/domain/repositories/planets_repo.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +19,17 @@ class PlanetsCubit extends Cubit<PlanetsState> {
     try {
       emit(PlanetsLoading());
       List<Planet> planets = await planetsRepo.getMarsPhotos();
-      emit(PlanetsLoaded(planets: planets));
+
+      if (!isClosed) {
+        emit(PlanetsLoaded(planets: planets));
+      }
     } catch (e) {
-      emit(PlanetsError(exception: e));
+      if (!isClosed) {
+        emit(PlanetsError(exception: e));
+        Future.delayed(const Duration(seconds: 3), () {
+          fetchMarsPhotos();
+        });
+      }
     }
 
   }
