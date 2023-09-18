@@ -10,6 +10,7 @@ Creative Fabrica Mars photos gallery
 
 1. Create .env file in the root of the project
 2. Place key-value string inside NASA_API_KEY=your_api_key
+3. Flutter test will work only after adding .env file
 
 Flutter 3.13.4 and Dart 3.1.2 required to run the app.
 
