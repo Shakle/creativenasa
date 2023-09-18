@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,27 +8,48 @@ part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(Unauthenticated()) {
-    signInAnonymously();
+    // Starts auth subscription to check auth states
+    _authStreamSub = getAuthSubscription();
   }
 
-  void signInAnonymously() {
+  late final StreamSubscription<User?> _authStreamSub;
+
+  // Auth state subscription to check state and make changes
+  StreamSubscription<User?> getAuthSubscription() {
+    return FirebaseAuth.instance.authStateChanges().listen((user) {
+      if (user != null) {
+        // Delay is to let you see the login screen, login is too fast
+        Future.delayed(const Duration(seconds: 2), () {
+          emit(Authenticated());
+        });
+      } else {
+        emit(Unauthenticated());
+        signInAnonymously();
+      }
+    });
+  }
+
+  // Signs user out
+  Future<void> signOut() async {
+    await FirebaseAuth.instance.signOut();
+  }
+
+  // Automatically authenticates
+  Future<void> signInAnonymously() async {
     emit(Authenticating());
 
     try {
-      // To let you see the login screen, login is too fast
-      Future.delayed(const Duration(seconds: 2), () async {
-        UserCredential userCredential = await FirebaseAuth.instance
-            .signInAnonymously();
-
-        if (userCredential.user != null) {
-          emit(Authenticated());
-        } else {
-          throw Exception('Could not sign in');
-        }
-      });
+      await FirebaseAuth.instance.signInAnonymously();
     } catch (e) {
       emit(AuthenticationFailed(exception: e));
       emit(Unauthenticated());
     }
+  }
+
+  // closes auth subscription (should never happen)
+  @override
+  Future<void> close() {
+    _authStreamSub.cancel();
+    return super.close();
   }
 }

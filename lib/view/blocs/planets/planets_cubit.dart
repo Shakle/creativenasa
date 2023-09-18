@@ -6,12 +6,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'planets_state.dart';
 
 class PlanetsCubit extends Cubit<PlanetsState> {
-  PlanetsCubit() : super(PlanetsInitial()) {
+  PlanetsCubit({required this.planetsRepo}) : super(PlanetsInitial()) {
     fetchMarsPhotos();
   }
 
-  final PlanetsRepo planetsRepo = PlanetsRepo();
+  final PlanetsRepo planetsRepo;
 
+  // Gets Mars photos
   Future<void> fetchMarsPhotos() async {
     try {
       emit(PlanetsLoading());

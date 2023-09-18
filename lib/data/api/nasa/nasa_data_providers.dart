@@ -5,8 +5,13 @@ import 'package:dio/dio.dart';
 
 class NasaDataProviders {
 
-  final NasaClient _nasaClient = NasaClient();
 
+  NasaDataProviders({required NasaClient nasaClient})
+      : _nasaClient = nasaClient;
+
+  final NasaClient _nasaClient;
+
+  // Fetches Mars photos
   Future<Response<Json>> getMarsPhotos() async {
     return await _nasaClient.get(NasaEndpoints.marsPhotos,
       queryParameters: {

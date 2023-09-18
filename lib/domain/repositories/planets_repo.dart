@@ -5,8 +5,12 @@ import 'package:dio/dio.dart';
 
 class PlanetsRepo {
 
-  final NasaDataProviders _nasaDataProviders = NasaDataProviders();
+  PlanetsRepo({required NasaDataProviders nasaDataProviders})
+      : _nasaDataProviders = nasaDataProviders;
 
+  final NasaDataProviders _nasaDataProviders;
+
+  // Fetches and serializes Mars photos
   Future<List<Planet>> getMarsPhotos() async {
     Response<Json> response = await _nasaDataProviders.getMarsPhotos();
     List<dynamic> photosList = response.data?['photos'];

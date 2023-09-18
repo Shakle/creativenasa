@@ -1,6 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:creativenasa/data/models/planet.dart';
+import 'package:creativenasa/data/api/nasa/nasa_client.dart';
+import 'package:creativenasa/data/api/nasa/nasa_data_providers.dart';
+import 'package:creativenasa/domain/repositories/planets_repo.dart';
+import 'package:creativenasa/view/blocs/auth/auth_cubit.dart';
 import 'package:creativenasa/view/blocs/planets/planets_cubit.dart';
+import 'package:creativenasa/view/screens/gallery/widgets/planets_grid.dart';
 import 'package:creativenasa/view/widgets/app_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,11 +14,35 @@ class GalleryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<PlanetsCubit>(
-      create: (context) => PlanetsCubit(),
+      // Did not use service locator to save time
+      create: (context) => PlanetsCubit(
+        planetsRepo: PlanetsRepo(
+          nasaDataProviders: NasaDataProviders(
+              nasaClient: NasaClient(),
+          ),
+        ),
+      ),
       child: AppScaffold(
+        appBar: AppBar(
+          title: const Text('Mars gallery'),
+          actions: [
+            logoutButton(context),
+          ],
+        ),
         padding: EdgeInsets.zero,
         body: layout(),
       ),
+    );
+  }
+
+  Widget logoutButton(BuildContext context) {
+    return IconButton(
+        onPressed: () {
+          context.read<AuthCubit>().signOut();
+        },
+        tooltip: 'Sign out',
+        iconSize: 22,
+        icon: const Icon(Icons.logout),
     );
   }
 
@@ -24,33 +51,10 @@ class GalleryScreen extends StatelessWidget {
       builder: (context, state) {
         return switch (state) {
           PlanetsLoading() => const Center(child: CircularProgressIndicator()),
-          PlanetsLoaded() => planetsGrid(state.planets),
+          PlanetsLoaded() => PlanetsGrid(planets: state.planets),
           _ => const SizedBox(),
         };
       },
-    );
-  }
-
-  Widget planetsGrid(List<Planet> planets) {
-    return GridView.builder(
-      itemCount: planets.length,
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4,
-        crossAxisSpacing: 5,
-        mainAxisSpacing: 5,
-      ),
-      itemBuilder: (context, index) {
-        return CachedNetworkImage(
-            imageUrl: planets[index].imgSrc,
-            fadeInDuration: const Duration(seconds: 1),
-            fadeInCurve: Curves.bounceInOut,
-            fit: BoxFit.cover,
-            placeholder: (context, index) => Container(
-                color: Colors.red.withOpacity(0.1),
-            ),
-        );
-      }
     );
   }
 }
